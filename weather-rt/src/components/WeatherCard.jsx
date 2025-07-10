@@ -1,113 +1,94 @@
 import React from 'react';
-import { FaThermometerHalf, FaTint, FaWind, FaEye, FaCompass } from 'react-icons/fa';
-import { 
-  getWeatherIcon, 
-  formatTemperature, 
-  formatHumidity, 
-  formatWindSpeed, 
-  formatPressure,
-  getWindDirection,
-  getFeelsLike,
-  getTemperatureColor
-} from '../utils/helpers';
-import './WeatherCard.css';
+import { WiHumidity, WiStrongWind, WiBarometer } from 'react-icons/wi';
 
-const WeatherCard = ({ weatherData }) => {
-  if (!weatherData) {
-    return null;
-  }
+function WeatherCard({ weatherData }) {
+  if (!weatherData) return null;
 
-  const {
-    name,
-    main: { temp, humidity, pressure },
-    weather: [weather],
-    wind: { speed, deg },
-    visibility,
-    sys: { country },
-    dt
-  } = weatherData;
+  const { main, weather, wind, name, sys } = weatherData;
+  const weatherInfo = weather[0];
 
-  const weatherIcon = getWeatherIcon(weather.icon);
-  const temperatureColor = getTemperatureColor(temp);
-  const feelsLikeTemp = getFeelsLike(temp, humidity, speed);
+  const getWeatherIcon = (iconCode) => {
+    const iconMap = {
+      '01d': '☀️', '01n': '🌙',
+      '02d': '⛅', '02n': '☁️',
+      '03d': '☁️', '03n': '☁️',
+      '04d': '☁️', '04n': '☁️',
+      '09d': '🌧️', '09n': '🌧️',
+      '10d': '🌦️', '10n': '🌧️',
+      '11d': '⛈️', '11n': '⛈️',
+      '13d': '❄️', '13n': '❄️',
+      '50d': '🌫️', '50n': '🌫️'
+    };
+    return iconMap[iconCode] || '🌤️';
+  };
+
+  const getTemperatureColor = (temp) => {
+    if (temp >= 30) return 'var(--accent-red)';
+    if (temp >= 25) return 'var(--accent-orange)';
+    if (temp >= 20) return 'var(--accent-green)';
+    if (temp >= 15) return 'var(--accent-cyan)';
+    return 'var(--accent-blue)';
+  };
 
   return (
-    <div className="weather-card" style={{ '--temp-color': temperatureColor }}>
+    <div className="weather-card">
       <div className="weather-header">
         <div className="location-info">
           <h2 className="city-name">{name}</h2>
-          <p className="country">{country}</p>
-          <p className="weather-description">{weather.description}</p>
+          <p className="country">{sys.country}</p>
         </div>
         <div className="weather-icon">
-          <span className="icon">{weatherIcon}</span>
+          {getWeatherIcon(weatherInfo.icon)}
         </div>
       </div>
 
       <div className="weather-main">
         <div className="temperature-section">
-          <div className="current-temp">
-            <span className="temp-value">{formatTemperature(temp)}</span>
-            <span className="temp-unit">C</span>
+          <div 
+            className="temperature"
+            style={{ color: getTemperatureColor(main.temp) }}
+          >
+            {Math.round(main.temp)}°C
           </div>
           <div className="feels-like">
-            <FaThermometerHalf className="feels-like-icon" />
-            <span>Sensación térmica: {formatTemperature(feelsLikeTemp)}</span>
+            Sensación: {Math.round(main.feels_like)}°C
           </div>
         </div>
-
-        <div className="weather-details">
-          <div className="detail-item">
-            <div className="detail-icon">
-              <FaTint />
-            </div>
-            <div className="detail-info">
-              <span className="detail-label">Humedad</span>
-              <span className="detail-value">{formatHumidity(humidity)}</span>
-            </div>
-          </div>
-
-          <div className="detail-item">
-            <div className="detail-icon">
-              <FaWind />
-            </div>
-            <div className="detail-info">
-              <span className="detail-label">Viento</span>
-              <span className="detail-value">
-                {formatWindSpeed(speed)} {getWindDirection(deg)}
-              </span>
-            </div>
-          </div>
-
-          <div className="detail-item">
-            <div className="detail-icon">
-              <FaEye />
-            </div>
-            <div className="detail-info">
-              <span className="detail-label">Visibilidad</span>
-              <span className="detail-value">{(visibility / 1000).toFixed(1)} km</span>
-            </div>
-          </div>
-
-          <div className="detail-item">
-            <div className="detail-icon">
-              <FaCompass />
-            </div>
-            <div className="detail-info">
-              <span className="detail-label">Presión</span>
-              <span className="detail-value">{formatPressure(pressure)}</span>
-            </div>
-          </div>
+        
+        <div className="weather-description">
+          <h3>{weatherInfo.description}</h3>
+          <p>Temperatura máxima: {Math.round(main.temp_max)}°C</p>
+          <p>Temperatura mínima: {Math.round(main.temp_min)}°C</p>
         </div>
       </div>
 
-      <div className="weather-footer">
-        <div className="update-time">
-          <span>Actualizado: {new Date(dt * 1000).toLocaleTimeString('es-ES')}</span>
+      <div className="weather-details">
+        <div className="detail-item">
+          <WiHumidity className="detail-icon" />
+          <div className="detail-content">
+            <span className="detail-label">Humedad</span>
+            <span className="detail-value">{main.humidity}%</span>
+          </div>
+        </div>
+        
+        <div className="detail-item">
+          <WiStrongWind className="detail-icon" />
+          <div className="detail-content">
+            <span className="detail-label">Viento</span>
+            <span className="detail-value">{Math.round(wind.speed)} km/h</span>
+          </div>
+        </div>
+        
+        <div className="detail-item">
+          <WiBarometer className="detail-icon" />
+          <div className="detail-content">
+            <span className="detail-label">Presión</span>
+            <span className="detail-value">{main.pressure} hPa</span>
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default WeatherCard; 

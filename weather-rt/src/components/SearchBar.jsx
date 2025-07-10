@@ -24,7 +24,6 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
       if (validation.isValid) {
         setIsSearching(true);
         onSearch(searchTerm);
-        setShowHistory(false);
         setValidationError('');
         // Resetear el estado de búsqueda después de 2 segundos
         setTimeout(() => setIsSearching(false), 2000);
@@ -37,7 +36,6 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
   // Manejar búsqueda por ubicación
   const handleLocationSearch = () => {
     onLocationSearch();
-    setShowHistory(false);
   };
 
   // Manejar selección del historial
@@ -46,7 +44,6 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
       setSearchTerm(city);
       setIsSearching(true);
       onHistorySelect(city);
-      setShowHistory(false);
       // Resetear el estado de búsqueda después de 2 segundos
       setTimeout(() => setIsSearching(false), 2000);
     }
@@ -60,8 +57,11 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
 
   // Cerrar historial al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = () => {
-      setShowHistory(false);
+    const handleClickOutside = (event) => {
+      // No cerrar si el clic es dentro del contenedor de búsqueda
+      if (!event.target.closest('.search-container')) {
+        setShowHistory(false);
+      }
     };
 
     document.addEventListener('click', handleClickOutside);
@@ -119,56 +119,75 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
         </div>
       )}
 
-      {showHistory && (
-        <div className="search-history">
-          {history.length > 0 ? (
-            <>
+                {showHistory && (
+            <div className="search-history">
               <div className="history-header">
-                <FaHistory className="history-icon" />
-                <span>Búsquedas recientes</span>
-                <button
-                  onClick={handleClearHistory}
-                  className="clear-history-button"
-                  title="Limpiar historial"
-                >
-                  <FaTimes />
-                </button>
+                {history.length > 0 ? (
+                  <>
+                    <div className="history-header-left">
+                      <FaHistory className="history-icon" />
+                      <span>Búsquedas recientes</span>
+                    </div>
+                    <div className="history-header-right">
+                      <button
+                        onClick={handleClearHistory}
+                        className="clear-history-button"
+                        title="Limpiar historial"
+                      >
+                        <FaTimes />
+                      </button>
+                      <button
+                        onClick={() => setShowHistory(false)}
+                        className="close-history-button"
+                        title="Cerrar"
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="history-header-left">
+                      <FaSearch className="history-icon" />
+                      <span>Ciudades populares</span>
+                    </div>
+                    <button
+                      onClick={() => setShowHistory(false)}
+                      className="close-history-button"
+                      title="Cerrar"
+                    >
+                      <FaTimes />
+                    </button>
+                  </>
+                )}
               </div>
               <ul className="history-list">
-                {history.map((city, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleHistorySelect(city)}
-                    className="history-item"
-                  >
-                    <FaSearch className="history-search-icon" />
-                    <span>{capitalizeWords(city)}</span>
-                  </li>
-                ))}
+                {history.length > 0 ? (
+                  history.map((city, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleHistorySelect(city)}
+                      className="history-item"
+                    >
+                      <FaSearch className="history-search-icon" />
+                      <span>{capitalizeWords(city)}</span>
+                    </li>
+                  ))
+                ) : (
+                  popularCities.map((city, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleHistorySelect(city)}
+                      className="history-item"
+                    >
+                      <FaSearch className="history-search-icon" />
+                      <span>{city}</span>
+                    </li>
+                  ))
+                )}
               </ul>
-            </>
-          ) : (
-            <>
-              <div className="history-header">
-                <FaSearch className="history-icon" />
-                <span>Ciudades populares</span>
-              </div>
-              <ul className="history-list">
-                {popularCities.map((city, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleHistorySelect(city)}
-                    className="history-item"
-                  >
-                    <FaSearch className="history-search-icon" />
-                    <span>{city}</span>
-                  </li>
-                ))}
-              </ul>
-            </>
+            </div>
           )}
-        </div>
-      )}
     </div>
   );
 };
