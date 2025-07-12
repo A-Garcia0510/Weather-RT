@@ -1,10 +1,13 @@
 .weather-stats {
   background: var(--bg-primary);
   border-radius: var(--radius-xl);
-  padding: var(--space-8);
+  padding: var(--space-10);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-light);
   transition: var(--transition-normal);
+  max-width: 900px;
+  width: 100%;
+  margin: 2rem auto;
 }
 
 .weather-stats:hover {
@@ -34,7 +37,7 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-6);
+  gap: var(--space-8);
 }
 
 .stats-section {
@@ -86,15 +89,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  color: var(--text-inverse);
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 2rem;
   flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18);
+  color: #fff;
+  background: var(--accent-blue);
+  transition: background 0.3s;
 }
+
+.icon-temp { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+.icon-humidity { background: linear-gradient(135deg, #10b981, #06b6d4); }
+.icon-cloud { background: linear-gradient(135deg, #64748b, #a1a1aa); }
+.icon-visibility { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.icon-wind { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+.icon-pressure { background: linear-gradient(135deg, #6366f1, #818cf8); }
+.icon-sun { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.icon-moon { background: linear-gradient(135deg, #a78bfa, #6366f1); }
 
 .stat-info {
   display: flex;

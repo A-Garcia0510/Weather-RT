@@ -8,6 +8,16 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
   const [showHistory, setShowHistory] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [localHistory, setLocalHistory] = useState([]);
+
+  // Sincronizar localHistory con localStorage y prop history
+  useEffect(() => {
+    let stored = [];
+    if (typeof window !== 'undefined') {
+      stored = JSON.parse(localStorage.getItem('weather_search_history') || '[]');
+    }
+    setLocalHistory(stored.length ? stored : history || []);
+  }, [history]);
 
   // Manejar cambios en el input
   const handleInputChange = (e) => {
@@ -55,6 +65,18 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
     onClearHistory();
   };
 
+  // Nueva función para eliminar una búsqueda individual
+  const handleDeleteHistoryItem = (city, e) => {
+    e.stopPropagation();
+    let stored = [];
+    if (typeof window !== 'undefined') {
+      stored = JSON.parse(localStorage.getItem('weather_search_history') || '[]');
+      stored = stored.filter(item => item.toLowerCase() !== city.toLowerCase());
+      localStorage.setItem('weather_search_history', JSON.stringify(stored));
+    }
+    setLocalHistory(stored);
+  };
+
   // Cerrar historial al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -77,13 +99,12 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
     <div className="search-container">
       <form onSubmit={handleSubmit} className="search-form">
         <div className="search-input-container">
-          <FaSearch className="search-icon" />
           <input
             type="text"
             value={searchTerm}
             onChange={handleInputChange}
             onFocus={() => setShowHistory(true)}
-            placeholder="Buscar ciudad..."
+            placeholder="Escribe el nombre de una ciudad..."
             className={`search-input ${validationError ? 'error' : ''}`}
             autoComplete="off"
           />
@@ -110,6 +131,7 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
           disabled={isSearching}
         >
           <FaLocationArrow />
+          <span>Mi ubicación</span>
         </button>
       </form>
 
@@ -119,75 +141,70 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
         </div>
       )}
 
-                {showHistory && (
-            <div className="search-history">
-              <div className="history-header">
-                {history.length > 0 ? (
-                  <>
-                    <div className="history-header-left">
-                      <FaHistory className="history-icon" />
-                      <span>Búsquedas recientes</span>
-                    </div>
-                    <div className="history-header-right">
-                      <button
-                        onClick={handleClearHistory}
-                        className="clear-history-button"
-                        title="Limpiar historial"
-                      >
-                        <FaTimes />
-                      </button>
-                      <button
-                        onClick={() => setShowHistory(false)}
-                        className="close-history-button"
-                        title="Cerrar"
-                      >
-                        <FaTimes />
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="history-header-left">
-                      <FaSearch className="history-icon" />
-                      <span>Ciudades populares</span>
-                    </div>
-                    <button
-                      onClick={() => setShowHistory(false)}
-                      className="close-history-button"
-                      title="Cerrar"
-                    >
-                      <FaTimes />
-                    </button>
-                  </>
-                )}
+      {showHistory && (
+        <div className="search-history">
+          {/* Botón de cerrar panel en la esquina superior derecha */}
+          <button
+            onClick={() => setShowHistory(false)}
+            className="close-history-button"
+            title="Cerrar"
+            style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}
+          >
+            <FaTimes />
+          </button>
+          
+          <div className="history-header">
+            {localHistory.length > 0 ? (
+              <div className="history-header-left">
+                <FaHistory className="history-icon" />
+                <span>Búsquedas recientes</span>
               </div>
-              <ul className="history-list">
-                {history.length > 0 ? (
-                  history.map((city, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleHistorySelect(city)}
-                      className="history-item"
-                    >
-                      <FaSearch className="history-search-icon" />
-                      <span>{capitalizeWords(city)}</span>
-                    </li>
-                  ))
-                ) : (
-                  popularCities.map((city, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleHistorySelect(city)}
-                      className="history-item"
-                    >
-                      <FaSearch className="history-search-icon" />
-                      <span>{city}</span>
-                    </li>
-                  ))
-                )}
-              </ul>
-            </div>
-          )}
+            ) : (
+              <div className="popular-cities-header">
+                <FaSearch className="history-icon" />
+                <span>Ciudades populares</span>
+              </div>
+            )}
+          </div>
+          
+          <ul className="history-list">
+            {localHistory.length > 0 ? (
+              localHistory.map((city, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleHistorySelect(city)}
+                  className="history-item"
+                >
+                  <div className="history-item-left">
+                    <FaSearch className="history-search-icon" />
+                    <span className="history-item-text">{capitalizeWords(city)}</span>
+                  </div>
+                  <button
+                    className="delete-history-item"
+                    title="Eliminar esta búsqueda"
+                    onClick={e => handleDeleteHistoryItem(city, e)}
+                  >
+                    <FaTimes />
+                  </button>
+                </li>
+              ))
+            ) : (
+              popularCities.map((city, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleHistorySelect(city)}
+                  className="popular-city-item"
+                >
+                  <div className="history-item-left">
+                    <FaSearch className="popular-city-icon" />
+                    <span className="popular-city-text">{city}</span>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

@@ -26,151 +26,93 @@ const WeatherStats = ({ weatherData }) => {
         <h3>📊 Estadísticas Detalladas</h3>
         <p>Información completa del clima actual</p>
       </div>
-
-      <div className="stats-grid">
+      <div className="stats-grid-cards">
         {/* Temperaturas */}
-        <div className="stats-section">
-          <h4>🌡️ Temperaturas</h4>
-          <div className="stats-items">
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaThermometerHalf />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Actual</span>
-                <span className="stat-value">{formatTemperature(temp)}</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaThermometerHalf />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Máxima</span>
-                <span className="stat-value">{formatTemperature(temp_max)}</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaThermometerHalf />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Mínima</span>
-                <span className="stat-value">{formatTemperature(temp_min)}</span>
-              </div>
-            </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-temp"><FaThermometerHalf /></span>
+          <div>
+            <div className="stat-label">ACTUAL</div>
+            <div className="stat-value">{formatTemperature(temp)}</div>
           </div>
         </div>
-
-        {/* Condiciones atmosféricas */}
-        <div className="stats-section">
-          <h4>🌤️ Condiciones</h4>
-          <div className="stats-items">
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaTint />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Humedad</span>
-                <span className="stat-value">{formatHumidity(humidity)}</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaCloud />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Nubosidad</span>
-                <span className="stat-value">{all}%</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaEye />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Visibilidad</span>
-                <span className="stat-value">{(visibility / 1000).toFixed(1)} km</span>
-              </div>
-            </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-temp"><FaThermometerHalf /></span>
+          <div>
+            <div className="stat-label">MÁXIMA</div>
+            <div className="stat-value">{formatTemperature(temp_max)}</div>
           </div>
         </div>
-
+        <div className="stat-card">
+          <span className="stat-icon icon-temp"><FaThermometerHalf /></span>
+          <div>
+            <div className="stat-label">MÍNIMA</div>
+            <div className="stat-value">{formatTemperature(temp_min)}</div>
+          </div>
+        </div>
+        {/* Condiciones */}
+        <div className="stat-card">
+          <span className="stat-icon icon-humidity"><FaTint /></span>
+          <div>
+            <div className="stat-label">HUMEDAD</div>
+            <div className="stat-value">{formatHumidity(humidity)}</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-cloud"><FaCloud /></span>
+          <div>
+            <div className="stat-label">NUBOSIDAD</div>
+            <div className="stat-value">{all}%</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-visibility"><FaEye /></span>
+          <div>
+            <div className="stat-label">VISIBILIDAD</div>
+            <div className="stat-value">{(visibility / 1000).toFixed(1)} km</div>
+          </div>
+        </div>
         {/* Viento y presión */}
-        <div className="stats-section">
-          <h4>💨 Viento y Presión</h4>
-          <div className="stats-items">
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaWind />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Velocidad</span>
-                <span className="stat-value">{formatWindSpeed(speed)}</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaCompass />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Dirección</span>
-                <span className="stat-value">{deg}°</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaCompass />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Presión</span>
-                <span className="stat-value">{formatPressure(pressure)}</span>
-              </div>
-            </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-wind"><FaWind /></span>
+          <div>
+            <div className="stat-label">VELOCIDAD</div>
+            <div className="stat-value">{formatWindSpeed(speed)}</div>
           </div>
         </div>
-
+        <div className="stat-card">
+          <span className="stat-icon icon-pressure"><FaCompass /></span>
+          <div>
+            <div className="stat-label">DIRECCIÓN</div>
+            <div className="stat-value">{deg}°</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-pressure"><FaCompass /></span>
+          <div>
+            <div className="stat-label">PRESIÓN</div>
+            <div className="stat-value">{formatPressure(pressure)}</div>
+          </div>
+        </div>
         {/* Horarios solares */}
-        <div className="stats-section">
-          <h4>☀️ Horarios Solares</h4>
-          <div className="stats-items">
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaSun />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Amanecer</span>
-                <span className="stat-value">{sunriseTime}</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaMoon />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Atardecer</span>
-                <span className="stat-value">{sunsetTime}</span>
-              </div>
-            </div>
-            
-            <div className="stat-item">
-              <div className="stat-icon">
-                <FaSun />
-              </div>
-              <div className="stat-info">
-                <span className="stat-label">Duración día</span>
-                <span className="stat-value">
-                  {Math.round((sunset - sunrise) / 3600)}h {Math.round(((sunset - sunrise) % 3600) / 60)}m
-                </span>
-              </div>
-            </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-sun"><FaSun /></span>
+          <div>
+            <div className="stat-label">AMANECER</div>
+            <div className="stat-value">{sunriseTime}</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-moon"><FaMoon /></span>
+          <div>
+            <div className="stat-label">ATARDECER</div>
+            <div className="stat-value">{sunsetTime}</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <span className="stat-icon icon-sun"><FaSun /></span>
+          <div>
+            <div className="stat-label">DURACIÓN DÍA</div>
+            <div className="stat-value">{Math.round((sunset - sunrise) / 3600)}h {Math.round(((sunset - sunrise) % 3600) / 60)}m</div>
           </div>
         </div>
       </div>
