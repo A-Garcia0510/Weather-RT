@@ -163,7 +163,7 @@ function App() {
           </div>
         </header>
 
-        {/* Main Content - Manteniendo la estructura original */}
+        {/* Main Content - Dos columnas */}
         <section className="content-section">
           {/* Left Column */}
           <div className="left-column">
@@ -181,7 +181,6 @@ function App() {
                 />
               </div>
             </div>
-
             {/* Información del Clima */}
             {weatherData && !loading && !error && (
               <div className="weather-section">
@@ -214,7 +213,6 @@ function App() {
                 </div>
               </div>
             )}
-
             {/* Welcome Section */}
             {!weatherData && !loading && !error && (
               <div className="weather-section">
@@ -226,7 +224,6 @@ function App() {
                 </div>
               </div>
             )}
-
             {/* Loading Section */}
             {loading && (
               <div className="weather-section">
@@ -235,7 +232,6 @@ function App() {
                 />
               </div>
             )}
-
             {/* Error Section */}
             {error && (
               <div className="weather-section">
@@ -245,72 +241,87 @@ function App() {
                 />
               </div>
             )}
-
             {/* Pronóstico de 5 días */}
-            {processedForecast.length > 0 && !loading && !error && (
-              <div className="forecast-section">
-                <h2 className="section-title">📅 Pronóstico de 5 días</h2>
-                <div className="forecast-grid">
-                  {processedForecast.map((day, idx) => (
-                    <div key={idx} className="forecast-day">
-                      <div className="forecast-day-name">{day.day}</div>
-                      <div className="forecast-day-icon">{day.icon}</div>
-                      <div className="forecast-day-temp">{Math.round(day.temp)}°C</div>
-                      <div className="forecast-day-humidity">💧{day.humidity}%</div>
-                      <div className="forecast-day-wind">🌬️ {Math.round(day.windSpeed * 3.6)}km/h</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Pronóstico Placeholder */}
-            {!weatherData && !loading && !error && (
-              <div className="forecast-section">
-                <h2 className="section-title">📅 Pronóstico de 5 días</h2>
-                <div className="forecast-placeholder">
-                  <p>El pronóstico aparecerá aquí cuando busques una ciudad</p>
-                </div>
-              </div>
-            )}
+            <div className="forecast-section forecast-flex">
+              {processedForecast.length > 0 && !loading && !error ? (
+                <>
+                  <h2 className="section-title">📅 Pronóstico de 5 días</h2>
+                  <div className="forecast-grid">
+                    {processedForecast.map((day, idx) => (
+                      <div key={idx} className="forecast-day">
+                        <div className="forecast-day-name">{day.day}</div>
+                        <div className="forecast-day-icon">{day.icon}</div>
+                        <div className="forecast-day-temp">{Math.round(day.temp)}°C</div>
+                        <div className="forecast-day-humidity">💧{day.humidity}%</div>
+                        <div className="forecast-day-wind">🌬️ {Math.round(day.windSpeed * 3.6)}km/h</div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h2 className="section-title">📅 Pronóstico de 5 días</h2>
+                  <div className="forecast-placeholder">
+                    <p>El pronóstico aparecerá aquí cuando busques una ciudad</p>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-
-          {/* Right Column - Estadísticas Detalladas */}
+          {/* Right Column: Panel de Búsquedas Recientes + Estadísticas Detalladas */}
           <div className="right-column">
-            <h2 className="section-title">📈 Estadísticas Detalladas</h2>
-            {weatherData && !loading && !error ? (
-              <div className="stats-grid">
-                <div className="stats-card temp-card">
-                  <p className="stats-title">🌡️ Temperaturas</p>
-                  <p>Actual: <span>{Math.round(weatherData.main.temp)}°C</span></p>
-                  <p>Máxima: <span>{Math.round(weatherData.main.temp_max)}°C</span></p>
-                  <p>Mínima: <span>{Math.round(weatherData.main.temp_min)}°C</span></p>
+            {/* Panel de Búsquedas Recientes */}
+            <div className="recent-searches-section">
+              <h2 className="section-title">🕑 Búsquedas Recientes</h2>
+              <ul className="recent-searches-list">
+                {getHistory().length === 0 ? (
+                  <li className="recent-searches-empty">No hay búsquedas recientes</li>
+                ) : (
+                  getHistory().map((city, idx) => (
+                    <li key={city + idx} className="recent-searches-item" onClick={() => handleHistorySelect(city)}>
+                      <span className="recent-searches-icon">📍</span> {city}
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+            {/* Estadísticas Detalladas */}
+            <div className="stats-section stats-flex">
+              <h2 className="section-title">📈 Estadísticas Detalladas</h2>
+              {weatherData && !loading && !error ? (
+                <div className="stats-grid">
+                  <div className="stats-card temp-card">
+                    <p className="stats-title">🌡️ Temperaturas</p>
+                    <p>Actual: <span>{Math.round(weatherData.main.temp)}°C</span></p>
+                    <p>Máxima: <span>{Math.round(weatherData.main.temp_max)}°C</span></p>
+                    <p>Mínima: <span>{Math.round(weatherData.main.temp_min)}°C</span></p>
+                  </div>
+                  <div className="stats-card conditions-card">
+                    <p className="stats-title">💧 Condiciones</p>
+                    <p>Humedad: <span>{weatherData.main.humidity}%</span></p>
+                    <p>Nubosidad: <span>{weatherData.clouds.all}%</span></p>
+                    <p>Visibilidad: <span>{Math.round(weatherData.visibility / 1000)} km</span></p>
+                  </div>
+                  <div className="stats-card wind-card">
+                    <p className="stats-title">🌬️ Viento y Presión</p>
+                    <p>Velocidad: <span>{weatherData.wind.speed} m/s</span></p>
+                    <p>Dirección: <span>{weatherData.wind.deg}°</span></p>
+                    <p>Presión: <span>{weatherData.main.pressure} hPa</span></p>
+                  </div>
+                  <div className="stats-card sun-card">
+                    <p className="stats-title">☀️ Horarios Solares</p>
+                    <p>Amanecer: <span>{new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}</span></p>
+                    <p>Atardecer: <span>{new Date(weatherData.sys.sunset * 1000).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}</span></p>
+                    <p>Duración: <span>{Math.floor((weatherData.sys.sunset - weatherData.sys.sunrise) / 3600)}h {Math.floor(((weatherData.sys.sunset - weatherData.sys.sunrise) % 3600) / 60)}m</span></p>
+                  </div>
                 </div>
-                <div className="stats-card conditions-card">
-                  <p className="stats-title">💧 Condiciones</p>
-                  <p>Humedad: <span>{weatherData.main.humidity}%</span></p>
-                  <p>Nubosidad: <span>{weatherData.clouds.all}%</span></p>
-                  <p>Visibilidad: <span>{Math.round(weatherData.visibility / 1000)} km</span></p>
+              ) : (
+                <div className="stats-placeholder">
+                  <p>Aquí encontrarás estadísticas detalladas del clima</p>
+                  <p>Incluyendo temperaturas, humedad, viento y horarios solares</p>
                 </div>
-                <div className="stats-card wind-card">
-                  <p className="stats-title">🌬️ Viento y Presión</p>
-                  <p>Velocidad: <span>{weatherData.wind.speed} m/s</span></p>
-                  <p>Dirección: <span>{weatherData.wind.deg}°</span></p>
-                  <p>Presión: <span>{weatherData.main.pressure} hPa</span></p>
-                </div>
-                <div className="stats-card sun-card">
-                  <p className="stats-title">☀️ Horarios Solares</p>
-                  <p>Amanecer: <span>{new Date(weatherData.sys.sunrise * 1000).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}</span></p>
-                  <p>Atardecer: <span>{new Date(weatherData.sys.sunset * 1000).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}</span></p>
-                  <p>Duración: <span>{Math.floor((weatherData.sys.sunset - weatherData.sys.sunrise) / 3600)}h {Math.floor(((weatherData.sys.sunset - weatherData.sys.sunrise) % 3600) / 60)}m</span></p>
-                </div>
-              </div>
-            ) : (
-              <div className="stats-placeholder">
-                <p>Aquí encontrarás estadísticas detalladas del clima</p>
-                <p>Incluyendo temperaturas, humedad, viento y horarios solares</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </section>
 
@@ -319,6 +330,7 @@ function App() {
           <div className="footer-text">
             Weather RT — Datos por OpenWeatherMap | Hecho con ❤️ en React
           </div>
+          <div className="footer-version">Versión 1.0.0</div>
         </footer>
       </main>
     </div>
