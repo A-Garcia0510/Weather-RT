@@ -1,5 +1,5 @@
 .weather-stats {
-  background: var(--bg-primary);
+  background: var(--card-bg);
   border-radius: var(--radius-xl);
   padding: var(--space-10);
   box-shadow: var(--shadow-lg);
@@ -41,7 +41,7 @@
 }
 
 .stats-section {
-  background: var(--bg-secondary);
+  background: var(--card-bg);
   padding: var(--space-6);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
@@ -51,7 +51,7 @@
 .stats-section:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  background: var(--bg-primary);
+  background: var(--card-hover);
 }
 
 .stats-section h4 {
@@ -73,16 +73,16 @@
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-4);
-  background: var(--bg-primary);
+  background: var(--card-hover);
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
   border: 1px solid var(--border-light);
 }
 
 .stat-item:hover {
-  background: var(--bg-secondary);
+  background: var(--card-bg);
   transform: translateX(4px);
-  border-color: var(--primary-color);
+  border-color: var(--accent-blue);
 }
 
 .stat-icon {
@@ -95,19 +95,19 @@
   font-size: 2rem;
   flex-shrink: 0;
   box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18);
-  color: #fff;
+  color: var(--text-primary);
   background: var(--accent-blue);
   transition: background 0.3s;
 }
 
-.icon-temp { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
-.icon-humidity { background: linear-gradient(135deg, #10b981, #06b6d4); }
-.icon-cloud { background: linear-gradient(135deg, #64748b, #a1a1aa); }
-.icon-visibility { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-.icon-wind { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
-.icon-pressure { background: linear-gradient(135deg, #6366f1, #818cf8); }
-.icon-sun { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.icon-moon { background: linear-gradient(135deg, #a78bfa, #6366f1); }
+.icon-temp { background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); }
+.icon-humidity { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); }
+.icon-cloud { background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); }
+.icon-visibility { background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow, #fbbf24)); }
+.icon-wind { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); }
+.icon-pressure { background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); }
+.icon-sun { background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow, #fbbf24)); }
+.icon-moon { background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); }
 
 .stat-info {
   display: flex;

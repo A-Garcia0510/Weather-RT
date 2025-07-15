@@ -1,12 +1,12 @@
 .weather-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   backdrop-filter: blur(20px);
   border-radius: 25px;
   padding: 30px;
   margin: 20px 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  color: white;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
   position: relative;
   overflow: hidden;
   animation: fadeInUp 0.6s ease;
@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--temp-color), #667eea);
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
   border-radius: 25px 25px 0 0;
 }
 
@@ -38,7 +38,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 5px 0;
-  background: linear-gradient(135deg, #fff, #f0f0f0);
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -46,14 +46,14 @@
 
 .country {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
   margin: 0 0 8px 0;
   font-weight: 500;
 }
 
 .weather-description {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   margin: 0;
   text-transform: capitalize;
   font-weight: 500;
@@ -65,7 +65,7 @@
   justify-content: center;
   width: 80px;
   height: 80px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-hover);
   border-radius: 50%;
   backdrop-filter: blur(10px);
 }
@@ -97,14 +97,14 @@
 .temp-value {
   font-size: 4rem;
   font-weight: 700;
-  color: var(--temp-color);
+  color: var(--accent-blue);
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .temp-unit {
   font-size: 2rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
   margin-left: 5px;
 }
 
@@ -113,11 +113,11 @@
   align-items: center;
   gap: 8px;
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
 }
 
 .feels-like-icon {
-  color: #ffd700;
+  color: var(--accent-orange);
   font-size: 1.1rem;
 }
 
@@ -132,15 +132,15 @@
   align-items: center;
   gap: 12px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-hover);
   border-radius: 15px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-light);
   transition: all 0.3s ease;
 }
 
 .detail-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   transform: translateY(-2px);
 }
 
@@ -150,9 +150,9 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   border-radius: 50%;
-  color: #4facfe;
+  color: var(--accent-blue);
   font-size: 1.1rem;
 }
 
@@ -164,7 +164,7 @@
 
 .detail-label {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -173,19 +173,19 @@
 .detail-value {
   font-size: 1.1rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin-top: 2px;
 }
 
 .weather-footer {
   text-align: center;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-light);
 }
 
 .update-time {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-style: italic;
 }
 
@@ -206,10 +206,10 @@
   margin-right: 0.5em;
 }
 .section-title .title-text {
-  background: linear-gradient(135deg, #fff, #3b82f6);
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-blue));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @keyframes fadeInUp {

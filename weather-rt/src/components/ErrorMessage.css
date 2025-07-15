@@ -7,12 +7,12 @@
 }
 
 .error-content {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   backdrop-filter: blur(20px);
   border-radius: 25px;
   padding: 40px 30px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-lg);
   max-width: 400px;
   width: 100%;
   animation: fadeInUp 0.6s ease;
@@ -28,14 +28,14 @@
 }
 
 .error-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 15px 0;
 }
 
 .error-message {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.5;
   margin: 0 0 25px 0;
@@ -46,8 +46,8 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  color: var(--text-primary);
   border: none;
   border-radius: 25px;
   font-size: 1rem;
@@ -59,7 +59,8 @@
 
 .retry-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-blue) 100%);
 }
 
 .retry-button:active {

@@ -531,3 +531,51 @@
   overflow: visible;
   position: relative;
 } 
+
+body.light-theme .search-history,
+body.light-theme .history-header {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: var(--text-primary) !important;
+  border: 1.5px solid var(--border-light) !important;
+  box-shadow: 0 8px 32px rgba(251, 146, 60, 0.10) !important;
+  backdrop-filter: blur(18px) !important;
+}
+body.light-theme .history-header {
+  border-bottom: 1.5px solid var(--border-light) !important;
+}
+body.light-theme .history-header-left {
+  color: var(--accent-orange) !important;
+}
+body.light-theme .history-icon {
+  color: var(--accent-orange) !important;
+}
+body.light-theme .history-list {
+  background: transparent !important;
+}
+body.light-theme .history-item {
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid rgba(251, 146, 60, 0.08) !important;
+  background: transparent !important;
+}
+body.light-theme .history-item:hover, 
+body.light-theme .history-item:focus {
+  background: rgba(251, 146, 60, 0.13) !important;
+  color: var(--accent-orange) !important;
+}
+body.light-theme .delete-history-item {
+  color: var(--accent-orange) !important;
+  background: rgba(251, 146, 60, 0.10) !important;
+}
+body.light-theme .delete-history-item:hover {
+  background: var(--accent-orange) !important;
+  color: #fff !important;
+}
+body.light-theme .close-history-button {
+  background: rgba(251, 146, 60, 0.10) !important;
+  color: var(--accent-orange) !important;
+  border: 1.5px solid var(--border-light) !important;
+}
+body.light-theme .close-history-button:hover {
+  background: var(--accent-orange) !important;
+  color: #fff !important;
+} 

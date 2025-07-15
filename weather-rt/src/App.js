@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeather } from './hooks/useWeather';
 import SearchBar from './components/SearchBar';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -122,6 +122,22 @@ function App() {
   
   console.log('🔍 Debug - Processed forecast:', processedForecast.length, 'items');
 
+  // MODO OSCURO/CLARO
+  const [theme, setTheme] = useState(() => {
+    // Detectar preferencia del sistema o localStorage
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+    return 'light';
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle('light-theme', theme === 'light');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+
   return (
     <div className="app-container">
       {/* Fondo animado */}
@@ -131,6 +147,13 @@ function App() {
           <div className="shape shape-2"></div>
           <div className="shape shape-3"></div>
           <div className="shape shape-4"></div>
+          {/* Formas adicionales para modo oscuro */}
+          {theme === 'dark' && <>
+            <div className="shape shape-5"></div>
+            <div className="shape shape-6"></div>
+            <div className="shape shape-7"></div>
+            <div className="shape shape-8"></div>
+          </>}
         </div>
       </div>
 
@@ -142,6 +165,15 @@ function App() {
               <span className="emoji logo-icon">🌤️</span>
               <span className="title-text">Weather RT</span>
             </h1>
+            <button
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+            >
+              <span className="theme-icon" aria-hidden="true">
+                {theme === 'light' ? '🌙' : '☀️'}
+              </span>
+            </button>
             <div className="time-section">
               <div className="current-time">
                 {new Date().toLocaleTimeString('es-ES', {
@@ -331,7 +363,7 @@ function App() {
           <div className="footer-text">
             Weather RT — Datos por OpenWeatherMap | Hecho con ❤️ en React
           </div>
-          <div className="footer-version">Versión 1.0.0</div>
+          <div className="footer-version">Versión 2.0.0</div>
         </footer>
       </main>
     </div>
