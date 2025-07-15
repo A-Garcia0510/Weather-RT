@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaLocationArrow, FaHistory, FaTimes } from 'react-icons/fa';
-import { validateCityName, debounce, capitalizeWords } from '../utils/helpers';
+import { validateCityName, capitalizeWords } from '../utils/helpers';
 import './SearchBar.css';
 
 const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onClearHistory }) => {
@@ -59,12 +59,6 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
     }
   };
 
-  // Manejar limpieza del historial
-  const handleClearHistory = (e) => {
-    e.stopPropagation();
-    onClearHistory();
-  };
-
   // Nueva función para eliminar una búsqueda individual
   const handleDeleteHistoryItem = (city, e) => {
     e.stopPropagation();
@@ -96,7 +90,7 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
   const popularCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao', 'Málaga', 'Zaragoza', 'Murcia'];
 
   return (
-    <div className="search-container">
+    <div className="search-container" style={{ marginTop: '2.5rem' }}>
       <form onSubmit={handleSubmit} className="search-form">
         <div className="search-input-container">
           <input
@@ -141,7 +135,70 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
         </div>
       )}
 
-      {/* Elimina el panel de búsquedas recientes de la barra de búsqueda */}
+                {showHistory && (
+            <div className="search-history">
+              {/* Botón de cerrar panel en la esquina superior derecha */}
+              <button
+                onClick={() => setShowHistory(false)}
+                className="close-history-button"
+                title="Cerrar"
+                style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}
+              >
+                <FaTimes />
+              </button>
+              <div className="history-header">
+                {localHistory.length > 0 ? (
+                  <>
+                    <div className="history-header-left">
+                      <FaHistory className="history-icon" />
+                      <span>Búsquedas recientes</span>
+                    </div>
+                    {/* Elimina la X de la cabecera aquí, solo deja la X de cerrar panel arriba */}
+                  </>
+                ) : (
+                  <>
+                    <div className="history-header-left">
+                      <FaSearch className="history-icon" />
+                      <span>Ciudades populares</span>
+                    </div>
+                  </>
+                )}
+              </div>
+              <ul className="history-list">
+                {localHistory.length > 0 ? (
+                  localHistory.map((city, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleHistorySelect(city)}
+                      className="history-item"
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span>{capitalizeWords(city)}</span>
+                      </span>
+                      <button
+                        className="delete-history-item"
+                        title="Eliminar esta búsqueda"
+                        onClick={e => handleDeleteHistoryItem(city, e)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </li>
+                  ))
+                ) : (
+                  popularCities.map((city, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleHistorySelect(city)}
+                      className="history-item"
+                    >
+                      <span>{city}</span>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+          )}
     </div>
   );
 };

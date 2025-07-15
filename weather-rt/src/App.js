@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { useWeather } from './hooks/useWeather';
 import SearchBar from './components/SearchBar';
-import WeatherCard from './components/WeatherCard';
-import ForecastCard from './components/ForecastCard';
-import WeatherStats from './components/WeatherStats';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import ApiKeyWarning from './components/ApiKeyWarning';
