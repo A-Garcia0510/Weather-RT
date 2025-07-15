@@ -130,6 +130,43 @@
   font-weight: 700;
 }
 
+.stats-header h3 .emoji {
+  color: initial !important;
+  filter: none !important;
+  -webkit-text-stroke: 0 !important;
+  vertical-align: middle;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  gap: 0.5em;
+}
+.section-title .emoji {
+  color: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  filter: none !important;
+  font-size: 1.3em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
+.section-title .title-text {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: var(--accent-blue);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .weather-stats {

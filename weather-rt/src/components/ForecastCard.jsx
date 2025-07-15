@@ -15,7 +15,10 @@ const ForecastCard = ({ forecastData }) => {
 
   return (
     <div className="forecast-container">
-      <h3 className="forecast-title">Pronóstico de 5 días</h3>
+      <h3 className="forecast-title section-title">
+        <span className="emoji">🔮</span>
+        <span className="title-text"> PRONÓSTICO DE 5 DÍAS</span>
+      </h3>
       <div className="forecast-grid">
         {dailyForecasts.map((forecast, index) => {
           const {
@@ -48,10 +51,11 @@ const ForecastCard = ({ forecastData }) => {
                   {weather.description}
                 </div>
                 <div className="forecast-humidity">
-                  💧 {humidity}%
+                  <span className="emoji">💧</span> {humidity}%
                 </div>
                 <div className="forecast-wind">
-                  💨 {Math.round(speed)} m/s
+                  <span className="emoji viento">💨</span>
+                  <span className="wind-value">{Math.round(speed)} km/h</span>
                 </div>
               </div>
             </div>

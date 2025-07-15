@@ -23,7 +23,10 @@ const WeatherStats = ({ weatherData }) => {
   return (
     <div className="weather-stats">
       <div className="stats-header">
-        <h3>📊 Estadísticas Detalladas</h3>
+        <h3 className="section-title">
+          <span className="emoji">📊</span>
+          <span className="title-text"> Estadísticas Detalladas</span>
+        </h3>
         <p>Información completa del clima actual</p>
       </div>
       <div className="stats-grid-cards">

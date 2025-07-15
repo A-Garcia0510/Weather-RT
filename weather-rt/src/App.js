@@ -139,7 +139,8 @@ function App() {
         <header className="header-section">
           <div className="header-content">
             <h1 className="app-title">
-              <span className="logo-icon">🌤️</span> Weather RT
+              <span className="emoji logo-icon">🌤️</span>
+              <span className="title-text">Weather RT</span>
             </h1>
             <div className="time-section">
               <div className="current-time">
@@ -250,7 +251,10 @@ function App() {
                         <div className="forecast-day-icon">{day.icon}</div>
                         <div className="forecast-day-temp">{Math.round(day.temp)}°C</div>
                         <div className="forecast-day-humidity">💧{day.humidity}%</div>
-                        <div className="forecast-day-wind">🌬️ {Math.round(day.windSpeed * 3.6)}km/h</div>
+                        <div className="forecast-day-wind">
+                          <span className="emoji viento">🌬️</span>
+                          <span className="wind-value">{Math.round(day.windSpeed * 3.6)}km/h</span>
+                        </div>
                       </div>
                     ))}
                   </div>

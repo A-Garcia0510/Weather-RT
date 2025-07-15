@@ -34,6 +34,10 @@ function WeatherCard({ weatherData }) {
     <div className="weather-card">
       <div className="weather-header">
         <div className="location-info">
+          <h3 className="section-title">
+            <span className="emoji">🌤️</span>
+            <span className="title-text"> INFORMACIÓN DEL CLIMA</span>
+          </h3>
           <h2 className="city-name">{name}</h2>
           <p className="country">{sys.country}</p>
         </div>

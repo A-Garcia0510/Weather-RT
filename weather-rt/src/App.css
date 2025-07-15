@@ -249,10 +249,26 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+}
+.app-title .emoji {
+  color: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  filter: none !important;
+  font-size: 2rem;
+  margin-right: 0.5em;
+  vertical-align: middle;
+}
+.app-title .title-text {
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: var(--accent-blue);
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 .logo-icon {
@@ -283,11 +299,36 @@ body {
 }
 
 /* ===== SECCIÓN DE CONTENIDO ===== */
+/* Elimina gradiente de .section-title */
 .section-title {
   font-size: 1.3rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.section-title .emoji {
+  color: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  filter: none !important;
+  font-size: 1.3em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
+.section-title .title-text {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: var(--accent-blue);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* ===== SECCIÓN DE BÚSQUEDA ===== */
@@ -322,10 +363,11 @@ body {
   align-items: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
+  color: var(--text-primary) !important;
 }
 
 .search-form {
@@ -498,10 +540,11 @@ body {
   align-items: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
+  color: var(--text-primary) !important;
 }
 
 .weather-info {
@@ -637,10 +680,11 @@ body {
   align-items: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
+  color: var(--text-primary) !important;
 }
 
 .forecast-grid {
@@ -668,10 +712,11 @@ body {
 }
 
 .forecast-day:hover {
-  background: linear-gradient(135deg, var(--accent-blue) 60%, rgba(51, 65, 85, 0.95) 100%);
-  box-shadow: 0 8px 32px rgba(59,130,246,0.18);
+  background: rgba(59, 130, 246, 0.08) !important;
+  box-shadow: 0 2px 8px 0 rgba(59,130,246,0.10) !important;
   border-color: var(--accent-blue);
-  transform: translateY(-4px) scale(1.04);
+  transform: translateY(-2px) scale(1.01);
+  filter: none;
 }
 
 .forecast-day-name {
@@ -690,14 +735,16 @@ body {
 }
 
 .forecast-day-temp {
+  color: #fff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--accent-orange);
-  background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   margin-bottom: 0.3rem;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 .forecast-day-humidity {
@@ -717,6 +764,14 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.forecast-day .emoji.viento {
+  color: #60a5fa !important;
+  filter: none !important;
+  vertical-align: middle !important;
+  font-size: 1.1em;
+  margin-right: 0.2em;
 }
 
 /* ===== PLACEHOLDER DE PRONÓSTICO ===== */
@@ -796,10 +851,11 @@ body {
   align-items: center;
   gap: 0.5rem;
   text-transform: uppercase;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
+  color: var(--text-primary) !important;
   transition: none;
 }
 
@@ -1288,4 +1344,35 @@ body {
   .weather-section {
     padding: 1.2rem 0.5rem;
   }
+}
+
+.forecast-day-wind {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  color: #60a5fa !important;
+  font-weight: 700;
+  font-size: 1em;
+  line-height: 1;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.forecast-day-wind .emoji.viento,
+.forecast-day-wind .wind-value {
+  color: #60a5fa !important;
+  font-size: 1em;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  background: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: unset !important;
 }

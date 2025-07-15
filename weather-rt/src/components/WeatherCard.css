@@ -189,6 +189,29 @@
   font-style: italic;
 }
 
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.section-title .emoji {
+  color: initial !important;
+  filter: none !important;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  font-size: 1.3em;
+  vertical-align: middle;
+  margin-right: 0.5em;
+}
+.section-title .title-text {
+  background: linear-gradient(135deg, #fff, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
