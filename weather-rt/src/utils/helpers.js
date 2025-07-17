@@ -29,6 +29,39 @@ export const fahrenheitToCelsius = (fahrenheit) => {
   return (fahrenheit - 32) * 5/9;
 };
 
+// Función para convertir temperatura entre unidades
+export const convertTemperature = (temp, fromUnit, toUnit) => {
+  if (fromUnit === toUnit) return temp;
+  
+  if (fromUnit === 'celsius' && toUnit === 'fahrenheit') {
+    return celsiusToFahrenheit(temp);
+  }
+  
+  if (fromUnit === 'fahrenheit' && toUnit === 'celsius') {
+    return fahrenheitToCelsius(temp);
+  }
+  
+  return temp;
+};
+
+// Función para formatear temperatura con unidad específica
+export const formatTemperatureWithUnit = (temp, unit) => {
+  const roundedTemp = Math.round(temp);
+  const unitSymbol = unit === 'celsius' ? 'C' : 'F';
+  return `${roundedTemp}°${unitSymbol}`;
+};
+
+// Función para obtener el símbolo de la unidad
+export const getUnitSymbol = (unit) => {
+  return unit === 'celsius' ? 'C' : 'F';
+};
+
+// Función para convertir y formatear temperatura
+export const convertAndFormatTemperature = (temp, fromUnit, toUnit) => {
+  const convertedTemp = convertTemperature(temp, fromUnit, toUnit);
+  return formatTemperatureWithUnit(convertedTemp, toUnit);
+};
+
 // Función para formatear la fecha
 export const formatDate = (timestamp, format = 'short') => {
   const date = new Date(timestamp * 1000);

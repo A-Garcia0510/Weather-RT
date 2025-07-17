@@ -1,0 +1,251 @@
+/* Container animation */
+.temperature-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  animation: toggleSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes toggleSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.temperature-toggle {
+  position: relative;
+  background: rgba(17, 24, 39, 0.8);
+  border: 2px solid #3b82f6;
+  border-radius: 50px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  min-width: 120px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(59,130,246,0.1);
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow, border-color;
+}
+
+.temperature-toggle:hover {
+  background: rgba(17, 24, 39, 0.95);
+  border-color: #60a5fa;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2), 0 0 0 1px #60a5fa, inset 0 1px 0 rgba(59,130,246,0.15);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.temperature-toggle:active {
+  transform: translateY(-1px) scale(0.98);
+  transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.temperature-toggle.animating {
+  animation: togglePulse 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes togglePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.toggle-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.toggle-track {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: calc(100% - 4px);
+  background: rgba(59,130,246,0.08);
+  border-radius: 46px;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 42px;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 12px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  will-change: transform;
+}
+
+.temperature-toggle.celsius-active .toggle-slider {
+  transform: translateX(0);
+}
+
+.temperature-toggle.fahrenheit-active .toggle-slider {
+  transform: translateX(100%);
+}
+
+.toggle-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.toggle-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-icon {
+  font-size: 18px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  will-change: transform;
+}
+
+.icon-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.temperature-toggle:hover .toggle-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.temperature-toggle:hover .icon-glow {
+  opacity: 0.8;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.unit-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.unit-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0.7;
+  color: #e5e7eb;
+  position: relative;
+  will-change: transform, opacity;
+}
+
+.unit-option.active {
+  opacity: 1;
+  color: white;
+  transform: scale(1.05);
+}
+
+.unit-option:hover:not(.active) {
+  opacity: 0.9;
+  transform: scale(1.1);
+}
+
+.unit-text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.unit-label {
+  font-size: 8px;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Light theme (orange) */
+.light-theme .temperature-toggle {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #f97316;
+  color: #1f2937;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 #f97316;
+}
+
+.light-theme .temperature-toggle:hover {
+  background: #fff7ed;
+  border-color: #fb923c;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.1), 0 0 0 1px #fb923c, inset 0 1px 0 #f97316;
+  transform: translateY(-3px) scale(1.2);
+}
+
+.light-theme .toggle-track {
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.light-theme .toggle-slider {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 4px 12px rgba(249,115,22,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.light-theme .unit-option {
+  color: #b45309;
+}
+
+.light-theme .unit-option.active {
+  color: white;
+}
+
+.light-theme .icon-glow {
+  background: radial-gradient(circle, #f97316 0%, transparent 70%);
+}
+
+/* Sliding shine effect - corregido para que no tape el texto */
+.temperature-toggle::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  background: linear-gradient(90deg, transparent 60%, rgba(255,255,255,0.18) 80%, transparent 100%);
+  border-radius: 40px;
+  pointer-events: none;
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 2;
+}
+
+.temperature-toggle:hover::before {
+  transform: translateX(120%);
+} 

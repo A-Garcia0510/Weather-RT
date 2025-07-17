@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useWeather } from './hooks/useWeather';
+import { useTemperature } from './contexts/TemperatureContext';
 import SearchBar from './components/SearchBar';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import ApiKeyWarning from './components/ApiKeyWarning';
+import TemperatureToggle from './components/TemperatureToggle';
 import './App.css';
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
     getHistory,
     clearHistory
   } = useWeather();
+
+  const { unit, convertTemperature } = useTemperature();
 
   // Cargar historial al iniciar
   useEffect(() => {
@@ -107,9 +111,12 @@ function App() {
         }
       };
 
+      // Convertir temperatura según la unidad seleccionada
+      const convertedTemp = unit === 'fahrenheit' ? (temp * 9/5) + 32 : temp;
+
       return {
         day,
-        temp,
+        temp: convertedTemp,
         humidity,
         windSpeed: speed,
         icon: getWeatherIcon(weather.main)
@@ -165,15 +172,18 @@ function App() {
               <span className="emoji logo-icon">🌤️</span>
               <span className="title-text">Weather RT</span>
             </h1>
-            <button
-              className="theme-toggle-btn"
-              onClick={toggleTheme}
-              aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-            >
-              <span className="theme-icon" aria-hidden="true">
-                {theme === 'light' ? '🌙' : '☀️'}
-              </span>
-            </button>
+            <div className="header-controls">
+              <TemperatureToggle />
+              <button
+                className="theme-toggle-btn"
+                onClick={toggleTheme}
+                aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+              >
+                <span className="theme-icon" aria-hidden="true">
+                  {theme === 'light' ? '🌙' : '☀️'}
+                </span>
+              </button>
+            </div>
             <div className="time-section">
               <div className="current-time">
                 {new Date().toLocaleTimeString('es-ES', {
@@ -219,10 +229,13 @@ function App() {
                   <div className="weather-info">
                     <div>
                       <h3 className="city-name">{weatherData.name}, {weatherData.sys.country}</h3>
-                      <p className="current-temperature">{Math.round(weatherData.main.temp)}°C</p>
+                      <p className="current-temperature">
+                        {Math.round(unit === 'fahrenheit' ? (weatherData.main.temp * 9/5) + 32 : weatherData.main.temp)}°{unit === 'celsius' ? 'C' : 'F'}
+                      </p>
                       <p className="weather-description">{weatherData.weather[0].description}</p>
                       <p className="temp-range">
-                        Máx: {Math.round(weatherData.main.temp_max)}°C / Mín: {Math.round(weatherData.main.temp_min)}°C
+                        Máx: {Math.round(unit === 'fahrenheit' ? (weatherData.main.temp_max * 9/5) + 32 : weatherData.main.temp_max)}°{unit === 'celsius' ? 'C' : 'F'} / 
+                        Mín: {Math.round(unit === 'fahrenheit' ? (weatherData.main.temp_min * 9/5) + 32 : weatherData.main.temp_min)}°{unit === 'celsius' ? 'C' : 'F'}
                       </p>
                     </div>
                     <div className="weather-icon-large">
@@ -281,7 +294,7 @@ function App() {
                       <div key={idx} className="forecast-day">
                         <div className="forecast-day-name">{day.day}</div>
                         <div className="forecast-day-icon">{day.icon}</div>
-                        <div className="forecast-day-temp">{Math.round(day.temp)}°C</div>
+                        <div className="forecast-day-temp">{Math.round(day.temp)}°{unit === 'celsius' ? 'C' : 'F'}</div>
                         <div className="forecast-day-humidity">💧{day.humidity}%</div>
                         <div className="forecast-day-wind">
                           <span className="emoji viento">🌬️</span>
@@ -325,9 +338,9 @@ function App() {
                 <div className="stats-grid">
                   <div className="stats-card temp-card">
                     <p className="stats-title">🌡️ Temperaturas</p>
-                    <p>Actual: <span>{Math.round(weatherData.main.temp)}°C</span></p>
-                    <p>Máxima: <span>{Math.round(weatherData.main.temp_max)}°C</span></p>
-                    <p>Mínima: <span>{Math.round(weatherData.main.temp_min)}°C</span></p>
+                    <p>Actual: <span>{Math.round(unit === 'fahrenheit' ? (weatherData.main.temp * 9/5) + 32 : weatherData.main.temp)}°{unit === 'celsius' ? 'C' : 'F'}</span></p>
+                    <p>Máxima: <span>{Math.round(unit === 'fahrenheit' ? (weatherData.main.temp_max * 9/5) + 32 : weatherData.main.temp_max)}°{unit === 'celsius' ? 'C' : 'F'}</span></p>
+                    <p>Mínima: <span>{Math.round(unit === 'fahrenheit' ? (weatherData.main.temp_min * 9/5) + 32 : weatherData.main.temp_min)}°{unit === 'celsius' ? 'C' : 'F'}</span></p>
                   </div>
                   <div className="stats-card conditions-card">
                     <p className="stats-title">💧 Condiciones</p>
