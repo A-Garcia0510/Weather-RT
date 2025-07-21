@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaLocationArrow, FaHistory, FaTimes } from 'react-icons/fa';
-import { validateCityName, capitalizeWords } from '../utils/helpers';
+import { capitalizeWords } from '../utils/helpers';
 import './SearchBar.css';
 
 const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onClearHistory }) => {
@@ -26,36 +26,99 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
     setValidationError('');
   };
 
-  // Manejar envío del formulario
+  // Función simplificada para validar ciudad
+  const validateCity = (city) => {
+    const trimmed = city.trim();
+    if (!trimmed) return { isValid: false, message: 'Por favor, ingresa el nombre de una ciudad' };
+    if (trimmed.length < 2) return { isValid: false, message: 'El nombre debe tener al menos 2 caracteres' };
+    if (trimmed.length > 50) return { isValid: false, message: 'El nombre es demasiado largo' };
+    return { isValid: true, message: '' };
+  };
+
+  // Manejar envío del formulario - VERSIÓN SIMPLIFICADA
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm.trim() && !isSearching) {
-      const validation = validateCityName(searchTerm);
-      if (validation.isValid) {
-        setIsSearching(true);
-        onSearch(searchTerm);
-        setValidationError('');
-        // Resetear el estado de búsqueda después de 2 segundos
-        setTimeout(() => setIsSearching(false), 2000);
-      } else {
-        setValidationError(validation.message);
-      }
+    e.stopPropagation();
+    
+    console.log('🔍 Debug - SearchBar handleSubmit llamado');
+    console.log('🔍 Debug - searchTerm:', searchTerm);
+    console.log('🔍 Debug - isSearching:', isSearching);
+    
+    const trimmedCity = searchTerm.trim();
+    
+    if (!trimmedCity) {
+      setValidationError('Por favor, ingresa el nombre de una ciudad');
+      return;
+    }
+    
+    if (isSearching) {
+      console.log('🔍 Debug - Ya está buscando, ignorando nueva petición');
+      return;
+    }
+    
+    const validation = validateCity(trimmedCity);
+    console.log('🔍 Debug - Validación:', validation);
+    
+    if (!validation.isValid) {
+      setValidationError(validation.message);
+      return;
+    }
+    
+    // Ejecutar búsqueda
+    console.log('🔍 Debug - Ejecutando búsqueda para:', trimmedCity);
+    setIsSearching(true);
+    setValidationError('');
+    
+    try {
+      onSearch(trimmedCity);
+      console.log('🔍 Debug - onSearch llamado exitosamente');
+    } catch (error) {
+      console.error('🔍 Debug - Error al llamar onSearch:', error);
+      setValidationError('Error al procesar la búsqueda');
+    } finally {
+      // Resetear el estado después de un tiempo
+      setTimeout(() => {
+        setIsSearching(false);
+        console.log('🔍 Debug - Estado de búsqueda reseteado');
+      }, 3000);
     }
   };
 
   // Manejar búsqueda por ubicación
   const handleLocationSearch = () => {
-    onLocationSearch();
+    console.log('🔍 Debug - handleLocationSearch llamado');
+    if (!isSearching) {
+      onLocationSearch();
+    }
   };
 
-  // Manejar selección del historial
+  // Manejar selección del historial - VERSIÓN SIMPLIFICADA
   const handleHistorySelect = (city) => {
-    if (!isSearching) {
-      setSearchTerm(city);
-      setIsSearching(true);
+    console.log('🔍 Debug - handleHistorySelect llamado con:', city);
+    
+    if (isSearching) {
+      console.log('🔍 Debug - Ya está buscando, ignorando selección del historial');
+      return;
+    }
+    
+    setSearchTerm(city);
+    setShowHistory(false);
+    setValidationError('');
+    
+    console.log('🔍 Debug - Ejecutando búsqueda desde historial para:', city);
+    setIsSearching(true);
+    
+    try {
       onHistorySelect(city);
-      // Resetear el estado de búsqueda después de 2 segundos
-      setTimeout(() => setIsSearching(false), 2000);
+      console.log('🔍 Debug - onHistorySelect llamado exitosamente');
+    } catch (error) {
+      console.error('🔍 Debug - Error al llamar onHistorySelect:', error);
+      setValidationError('Error al procesar la búsqueda');
+    } finally {
+      setTimeout(() => {
+        setIsSearching(false);
+        console.log('🔍 Debug - Estado de búsqueda reseteado (historial)');
+      }, 3000);
     }
   };
 
@@ -74,7 +137,6 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
   // Cerrar historial al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // No cerrar si el clic es dentro del contenedor de búsqueda
       if (!event.target.closest('.search-container')) {
         setShowHistory(false);
       }
@@ -101,8 +163,9 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
             placeholder="Escribe el nombre de una ciudad..."
             className={`search-input ${validationError ? 'error' : ''}`}
             autoComplete="off"
+            disabled={isSearching}
           />
-          {searchTerm && (
+          {searchTerm && !isSearching && (
             <button
               type="button"
               onClick={() => setSearchTerm('')}
@@ -113,7 +176,12 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
           )}
         </div>
         
-        <button type="submit" className="search-button" disabled={isSearching}>
+        <button 
+          type="submit" 
+          className="search-button" 
+          disabled={isSearching}
+          onClick={handleSubmit}
+        >
           {isSearching ? 'Buscando...' : 'Buscar'}
         </button>
         
@@ -135,70 +203,64 @@ const SearchBar = ({ onSearch, onLocationSearch, history, onHistorySelect, onCle
         </div>
       )}
 
-                {showHistory && (
-            <div className="search-history">
-              {/* Botón de cerrar panel en la esquina superior derecha */}
-              <button
-                onClick={() => setShowHistory(false)}
-                className="close-history-button"
-                title="Cerrar"
-                style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}
-              >
-                <FaTimes />
-              </button>
-              <div className="history-header">
-                {localHistory.length > 0 ? (
-                  <>
-                    <div className="history-header-left">
-                      <FaHistory className="history-icon" />
-                      <span>Búsquedas recientes</span>
-                    </div>
-                    {/* Elimina la X de la cabecera aquí, solo deja la X de cerrar panel arriba */}
-                  </>
-                ) : (
-                  <>
-                    <div className="history-header-left">
-                      <FaSearch className="history-icon" />
-                      <span>Ciudades populares</span>
-                    </div>
-                  </>
-                )}
+      {showHistory && (
+        <div className="search-history">
+          <button
+            onClick={() => setShowHistory(false)}
+            className="close-history-button"
+            title="Cerrar"
+            style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}
+          >
+            <FaTimes />
+          </button>
+          <div className="history-header">
+            {localHistory.length > 0 ? (
+              <div className="history-header-left">
+                <FaHistory className="history-icon" />
+                <span>Búsquedas recientes</span>
               </div>
-              <ul className="history-list">
-                {localHistory.length > 0 ? (
-                  localHistory.map((city, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleHistorySelect(city)}
-                      className="history-item"
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                    >
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span>{capitalizeWords(city)}</span>
-                      </span>
-                      <button
-                        className="delete-history-item"
-                        title="Eliminar esta búsqueda"
-                        onClick={e => handleDeleteHistoryItem(city, e)}
-                      >
-                        <FaTimes />
-                      </button>
-                    </li>
-                  ))
-                ) : (
-                  popularCities.map((city, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleHistorySelect(city)}
-                      className="history-item"
-                    >
-                      <span>{city}</span>
-                    </li>
-                  ))
-                )}
-              </ul>
-            </div>
-          )}
+            ) : (
+              <div className="history-header-left">
+                <FaSearch className="history-icon" />
+                <span>Ciudades populares</span>
+              </div>
+            )}
+          </div>
+          <ul className="history-list">
+            {localHistory.length > 0 ? (
+              localHistory.map((city, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleHistorySelect(city)}
+                  className="history-item"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span>{capitalizeWords(city)}</span>
+                  </span>
+                  <button
+                    className="delete-history-item"
+                    title="Eliminar esta búsqueda"
+                    onClick={e => handleDeleteHistoryItem(city, e)}
+                  >
+                    <FaTimes />
+                  </button>
+                </li>
+              ))
+            ) : (
+              popularCities.map((city, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleHistorySelect(city)}
+                  className="history-item"
+                >
+                  <span>{city}</span>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

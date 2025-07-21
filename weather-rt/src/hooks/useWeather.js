@@ -10,18 +10,22 @@ export const useWeather = () => {
 
   // Función para buscar clima por ciudad
   const searchWeather = useCallback(async (city) => {
+    console.log('🔍 Debug - searchWeather llamado con:', city);
+    
     if (!city.trim()) {
       setError('Por favor, ingresa el nombre de una ciudad');
       return;
     }
 
-    // Evitar múltiples peticiones simultáneas
-    if (loading) {
-      console.log('🔍 Debug - Búsqueda en progreso, ignorando nueva petición');
-      return;
-    }
+    // Evitar múltiples peticiones simultáneas usando una referencia
+    setLoading(prevLoading => {
+      if (prevLoading) {
+        console.log('🔍 Debug - Búsqueda en progreso, ignorando nueva petición');
+        return prevLoading;
+      }
+      return true;
+    });
 
-    setLoading(true);
     setError(null);
     setCurrentCity(city);
 
@@ -29,11 +33,15 @@ export const useWeather = () => {
       console.log('🔍 Debug - Iniciando búsqueda para:', city);
       
       // Obtener clima actual
+      console.log('🔍 Debug - Llamando getCurrentWeather...');
       const currentWeather = await getCurrentWeather(city);
+      console.log('🔍 Debug - Clima actual obtenido:', currentWeather);
       setWeatherData(currentWeather);
 
       // Obtener pronóstico
+      console.log('🔍 Debug - Llamando getForecast...');
       const forecast = await getForecast(city);
+      console.log('🔍 Debug - Pronóstico obtenido:', forecast);
       setForecastData(forecast);
 
       // Guardar en historial local
@@ -42,13 +50,14 @@ export const useWeather = () => {
       console.log('🔍 Debug - Búsqueda completada exitosamente');
     } catch (err) {
       console.error('🔍 Debug - Error en búsqueda:', err.message);
+      console.error('🔍 Debug - Error completo:', err);
       setError(err.message);
       setWeatherData(null);
       setForecastData(null);
     } finally {
       setLoading(false);
     }
-  }, [loading]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Función para obtener clima por geolocalización
   const getWeatherByLocation = useCallback(async () => {
@@ -85,6 +94,45 @@ export const useWeather = () => {
       setLoading(false);
     }
   }, []);
+
+  // Función para buscar clima por coordenadas (para el mapa)
+  const searchWeatherByCoords = useCallback(async (lat, lon) => {
+    // Evitar múltiples peticiones simultáneas usando una referencia
+    setLoading(prevLoading => {
+      if (prevLoading) {
+        console.log('🔍 Debug - Búsqueda en progreso, ignorando nueva petición');
+        return prevLoading;
+      }
+      return true;
+    });
+
+    setError(null);
+
+    try {
+      console.log('🔍 Debug - Iniciando búsqueda por coordenadas:', lat, lon);
+      
+      // Obtener clima actual por coordenadas
+      const currentWeather = await getWeatherByCoords(lat, lon);
+      setWeatherData(currentWeather);
+      setCurrentCity(currentWeather.name);
+
+      // Obtener pronóstico por coordenadas
+      const forecast = await getForecastByCoords(lat, lon);
+      setForecastData(forecast);
+
+      // Guardar en historial local
+      saveToHistory(currentWeather.name);
+      
+      console.log('🔍 Debug - Búsqueda por coordenadas completada exitosamente');
+    } catch (err) {
+      console.error('🔍 Debug - Error en búsqueda por coordenadas:', err.message);
+      setError(err.message);
+      setWeatherData(null);
+      setForecastData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Función para limpiar datos
   const clearWeather = useCallback(() => {
@@ -147,6 +195,7 @@ export const useWeather = () => {
     error,
     currentCity,
     searchWeather,
+    searchWeatherByCoords,
     getWeatherByLocation,
     clearWeather,
     getHistory,

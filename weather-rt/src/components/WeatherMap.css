@@ -1,0 +1,319 @@
+/* ===== WEATHER MAP STYLES ===== */
+.weather-map-container {
+  width: 100%;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: 1.5rem;
+  border: 2px solid var(--border-light);
+  box-shadow: 0 12px 40px 0 rgba(59, 130, 246, 0.13), 0 2px 8px 0 rgba(0,0,0,0.13);
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  margin-bottom: 2rem;
+  margin-top: 0;
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+  animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
+  box-sizing: border-box;
+}
+
+.weather-map-container:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.map-header {
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.map-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.map-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.map-wrapper {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  margin-top: 1rem;
+}
+
+.weather-map {
+  height: 400px !important;
+  width: 100% !important;
+  border-radius: var(--radius-md, 1rem);
+  z-index: 1;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* Estilos para el popup del mapa */
+.map-popup {
+  padding: var(--space-sm);
+  min-width: 200px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: var(--space-xs);
+}
+
+.popup-icon {
+  font-size: 1.5rem;
+}
+
+.popup-city {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.popup-weather {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.popup-temp {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin: 0;
+}
+
+.popup-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.popup-humidity,
+.popup-wind {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.map-controls {
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+}
+
+.map-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.map-info p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Estilos para modo claro */
+body.light-theme .weather-map-container {
+  background: #fffbe9;
+  border: 2px solid var(--accent-orange);
+  box-shadow: 0 8px 32px rgba(255, 200, 100, 0.13);
+}
+
+body.light-theme .weather-map-container:hover {
+  box-shadow: 0 12px 40px rgba(255, 200, 100, 0.15);
+  border-color: var(--accent-orange);
+}
+
+body.light-theme .map-wrapper {
+  background: #fff;
+  border: 1px solid var(--accent-orange);
+}
+
+body.light-theme .map-controls {
+  background: rgba(255, 245, 210, 0.6);
+  border: 1px solid var(--border-light);
+}
+
+body.light-theme .popup-city {
+  color: var(--text-primary);
+}
+
+body.light-theme .popup-temp {
+  color: var(--accent-orange);
+}
+
+body.light-theme .map-popup {
+  background: #fffbe9;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 8px rgba(255, 200, 100, 0.13);
+}
+
+body.dark-theme .weather-map-container {
+  background: #23283a;
+  border: 2px solid var(--accent-blue);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.13);
+}
+
+body.dark-theme .map-title {
+  color: var(--accent-blue);
+}
+
+body.dark-theme .map-wrapper {
+  background: #23283a;
+  border: 1px solid var(--accent-blue);
+}
+
+body.dark-theme .popup-temp {
+  color: var(--accent-blue);
+}
+
+body.dark-theme .map-popup {
+  background: #23283a;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.13);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .weather-map {
+    height: 300px;
+  }
+  
+  .map-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .map-title {
+    font-size: 1.3rem;
+  }
+  
+  .weather-map-container {
+    padding: var(--space-sm);
+    margin: var(--space-sm) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-map {
+    height: 250px;
+  }
+  
+  .map-popup {
+    min-width: 150px;
+    padding: var(--space-xs);
+  }
+  
+  .popup-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .popup-weather {
+    text-align: center;
+  }
+}
+
+/* Animaciones */
+.weather-map-container {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.map-wrapper {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes mapSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.weather-map-container {
+  animation: mapSlideIn 0.5s ease-out;
+}
+
+/* Estilos para el contenedor cuando está en modo toggle */
+.weather-map-container.map-toggle {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.weather-map-container.map-toggle.show {
+  max-height: 500px;
+  opacity: 1;
+  padding: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+/* Estilos para el botón de toggle del mapa */
+.map-toggle-btn {
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
+}
+
+.map-toggle-btn:hover {
+  background: var(--accent-cyan);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.map-toggle-btn:active {
+  transform: translateY(0);
+}
+
+body.light-theme .map-toggle-btn {
+  background: var(--accent-orange);
+}
+
+body.light-theme .map-toggle-btn:hover {
+  background: var(--accent-purple);
+} 

@@ -4,16 +4,25 @@ import { useTemperature } from '../contexts/TemperatureContext';
 
 const SettingsDrawer = () => {
   const [open, setOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('theme') === 'dark';
-  });
   const { unit, setUnit } = useTemperature();
 
+  // Obtener el tema actual del body
+  const [darkMode, setDarkMode] = useState(() => {
+    return document.body.classList.contains('light-theme') ? false : true;
+  });
+
+  // Sincronizar con el tema actual del body
   useEffect(() => {
-    document.body.classList.toggle('dark-theme', darkMode);
-    document.body.classList.toggle('light-theme', !darkMode);
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-  }, [darkMode]);
+    const updateDarkMode = () => {
+      setDarkMode(document.body.classList.contains('light-theme') ? false : true);
+    };
+    
+    // Observar cambios en las clases del body
+    const observer = new MutationObserver(updateDarkMode);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('temperatureUnit', unit);
@@ -21,6 +30,17 @@ const SettingsDrawer = () => {
 
   const handleUnitChange = (newUnit) => {
     setUnit(newUnit);
+  };
+
+  const handleThemeChange = (isDark) => {
+    if (isDark) {
+      document.body.classList.remove('light-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.add('light-theme');
+      localStorage.setItem('theme', 'light');
+    }
+    setDarkMode(isDark);
   };
 
   return (
@@ -51,13 +71,13 @@ const SettingsDrawer = () => {
           <div className="toggle-switch-row">
             <button
               className={`toggle-switch-btn${!darkMode ? ' active' : ''}`}
-              onClick={() => setDarkMode(false)}
+              onClick={() => handleThemeChange(false)}
             >
               Claro
             </button>
             <button
               className={`toggle-switch-btn${darkMode ? ' active' : ''}`}
-              onClick={() => setDarkMode(true)}
+              onClick={() => handleThemeChange(true)}
             >
               Oscuro
             </button>

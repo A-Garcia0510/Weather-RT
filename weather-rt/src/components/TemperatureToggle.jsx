@@ -3,7 +3,7 @@ import { useTemperature } from '../contexts/TemperatureContext';
 import './TemperatureToggle.css';
 
 const TemperatureToggle = () => {
-  const { unit, toggleUnit, isCelsius } = useTemperature();
+  const { toggleUnit, isCelsius } = useTemperature();
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleToggle = () => {

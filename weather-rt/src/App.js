@@ -1,25 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeather } from './hooks/useWeather';
 import { useTemperature } from './contexts/TemperatureContext';
 import SearchBar from './components/SearchBar';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import ApiKeyWarning from './components/ApiKeyWarning';
+import WeatherMap from './components/WeatherMap';
 import SettingsDrawer from './components/SettingsDrawer';
 import './App.css';
 
 function App() {
   console.log('🔍 Debug - App component rendering...');
   
-  const {
-    weatherData,
-    forecastData,
-    loading,
-    error,
-    currentCity,
-    searchWeather,
-    getWeatherByLocation,
-    getHistory,
+    const { 
+    weatherData, 
+    forecastData, 
+    loading, 
+    error, 
+    currentCity, 
+    searchWeather, 
+    searchWeatherByCoords, 
+    getWeatherByLocation, 
+    getHistory, 
     clearHistory
   } = useWeather();
 
@@ -36,15 +38,30 @@ function App() {
   }, [getHistory]);
 
   const handleSearch = (city) => {
-    searchWeather(city);
+    console.log('🔍 Debug - handleSearch llamado con:', city);
+    console.log('🔍 Debug - searchWeather function:', typeof searchWeather);
+    try {
+      searchWeather(city);
+      console.log('🔍 Debug - searchWeather llamado exitosamente');
+    } catch (error) {
+      console.error('🔍 Debug - Error al llamar searchWeather:', error);
+    }
   };
 
   const handleLocationSearch = () => {
+    console.log('🔍 Debug - handleLocationSearch llamado');
     getWeatherByLocation();
   };
 
   const handleHistorySelect = (city) => {
-    searchWeather(city);
+    console.log('🔍 Debug - handleHistorySelect llamado con:', city);
+    console.log('🔍 Debug - searchWeather function:', typeof searchWeather);
+    try {
+      searchWeather(city);
+      console.log('🔍 Debug - searchWeather llamado exitosamente desde historial');
+    } catch (error) {
+      console.error('🔍 Debug - Error al llamar searchWeather desde historial:', error);
+    }
   };
 
   const handleRetry = () => {
@@ -130,6 +147,54 @@ function App() {
   console.log('🔍 Debug - Processed forecast:', processedForecast.length, 'items');
 
   // MODO OSCURO/CLARO
+  const [theme, setTheme] = useState(() => {
+    // Detectar preferencia del sistema o localStorage
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+    return 'light';
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle('light-theme', theme === 'light');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // Sincronizar con cambios externos del tema (desde SettingsDrawer)
+  useEffect(() => {
+    const updateTheme = () => {
+      const isLight = document.body.classList.contains('light-theme');
+      if (isLight && theme !== 'light') {
+        setTheme('light');
+      } else if (!isLight && theme !== 'dark') {
+        setTheme('dark');
+      }
+    };
+    
+    // Observar cambios en las clases del body
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
+  }, [theme]);
+
+  // Eliminar estado y lógica de activeView
+  // const [activeView, setActiveView] = useState('weather');
+
+  const handleLocationSelect = (lat, lng) => {
+    searchWeatherByCoords(lat, lng);
+  };
+
+  // Debug logs (solo en desarrollo)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 Debug - App render:', {
+      weatherData: !!weatherData,
+      loading,
+      error,
+      currentCity,
+      // activeView // Eliminar activeView de los logs
+    });
+  }
 
   return (
     <div className="app-container">
@@ -141,12 +206,12 @@ function App() {
           <div className="shape shape-3"></div>
           <div className="shape shape-4"></div>
           {/* Formas adicionales para modo oscuro */}
-          {/* theme === 'dark' && <>
+          {theme === 'dark' && <>
             <div className="shape shape-5"></div>
             <div className="shape shape-6"></div>
             <div className="shape shape-7"></div>
             <div className="shape shape-8"></div>
-          </> */}
+          </>}
         </div>
       </div>
 
@@ -158,18 +223,10 @@ function App() {
               <span className="emoji logo-icon">🌤️</span>
               <span className="title-text">Weather RT</span>
             </h1>
-            <div className="header-controls">
-              {/* <TemperatureToggle /> */}
-              {/* <button
-                className="theme-toggle-btn"
-                onClick={toggleTheme}
-                aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-              >
-                <span className="theme-icon" aria-hidden="true">
-                  {theme === 'light' ? '🌙' : '☀️'}
-                </span>
-              </button> */}
-            </div>
+            {/* Elimina el TemperatureToggle del header */}
+            {/* <div className="header-controls">
+              <TemperatureToggle />
+            </div> */}
             <div className="time-section">
               <div className="current-time">
                 {new Date().toLocaleTimeString('es-ES', {
@@ -207,7 +264,8 @@ function App() {
                 />
               </div>
             </div>
-            {/* Información del Clima */}
+
+            {/* Vista de Clima Normal (si hay datos) */}
             {weatherData && !loading && !error && (
               <div className="weather-section">
                 <h2 className="section-title">📊 Información del Clima</h2>
@@ -357,15 +415,35 @@ function App() {
           </div>
         </section>
 
+        {/* Mapa Interactivo como sección horizontal al final */}
+        {weatherData && !loading && !error ? (
+          <div className="interactive-map-section full-width-section">
+            <WeatherMap
+              weatherData={weatherData}
+              onLocationSelect={handleLocationSelect}
+              isVisible={true}
+            />
+          </div>
+        ) : (!loading && !error && (
+          <div className="interactive-map-section full-width-section">
+            <div className="weather-map-container" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 200}}>
+              <div style={{fontSize: '2.5rem', marginBottom: '1rem'}}>🗺️</div>
+              <h3 style={{margin: 0, color: 'var(--text-primary)'}}>Aquí aparecerá el mapa interactivo</h3>
+              <p style={{color: 'var(--text-secondary)', marginTop: 8, textAlign: 'center'}}>Busca una ciudad o usa tu ubicación para explorar el clima en el mapa.</p>
+            </div>
+          </div>
+        ))}
+
         {/* Footer */}
         <footer className="footer-section">
           <div className="footer-text">
             Weather RT — Datos por OpenWeatherMap | Hecho con ❤️ en React
           </div>
-          <div className="footer-version">Versión 2.5.0</div>
+          <div className="footer-version">Versión 2.0.0</div>
         </footer>
       </main>
-      {/* Drawer de configuración flotante */}
+
+      {/* Settings Drawer (Menú Flotante) */}
       <SettingsDrawer />
     </div>
   );
